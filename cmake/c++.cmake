@@ -1,0 +1,12 @@
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS ON)
+
+set(CMAKE_C_COMPILER /usr/bin/gcc)
+set(CMAKE_CPP_COMPILER /usr/bin/g++)
+
+set(COMMON_C_OPTIONS -g -std=c11 -Wall -Wshadow -pedantic)
+set(COMMON_C_OPTIONS -g -Wall -Wshadow -pedantic)
+
+set(COMMON_C_OPTIONS_STRICT ${COMMON_C_OPTIONS} -Werror)
+set(COMMON_CXX_OPTIONS_STRICT ${COMMON_CXX_OPTIONS})
