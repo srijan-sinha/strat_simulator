@@ -2,10 +2,11 @@
 #include "code/include/strategy/base_strategy.hpp"
 
 namespace strategy {
-class SampleStrategy(BaseStrategy) {
+class SampleStrategy1 : public BaseStrategy {
 public:
-	SampleStrategy();
-	~SampleStrategy() = default;
+	SampleStrategy1(const boost::property_tree::ptree& config);
+	~SampleStrategy1() = default;
 	void get_position(uint32_t time_index, const double** closing_price, double** positions) override;
-}; // class SampleStrategy
+
+}; // class SampleStrategy1
 } // namespace strategy

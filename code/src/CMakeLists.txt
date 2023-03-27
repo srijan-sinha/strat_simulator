@@ -6,5 +6,5 @@ include(../../common.cmake)
 include_directories(../../)
 
 add_subdirectory(simulator simulator)
-#add_subdirectory(strategy strategy)
+add_subdirectory(strategy strategy)
 add_subdirectory(utils utils)

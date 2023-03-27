@@ -1,6 +1,10 @@
 #pragma once
-#include </Users/srijansinha/Projects/strat_simulator/code/include/strategy/base_strategy.hpp>
+#include "code/include/strategy/base_strategy.hpp"
+#include "code/include/strategy/defs.h"
+#include "code/include/utils/parser.hpp"
+#include <boost/property_tree/ptree.hpp>
 #include <cstdint>
+#include <utility>
 
 namespace sim {
 /**
@@ -21,28 +25,39 @@ public:
 	@param[in] time_points
 	@param[in] num_stocks
 	*/
-	Simulator(uint32_t time_points, uint32_t num_stocks);
+	Simulator(const char* config_file);
 
 	/**
 	Destructor
 	*/
-	~Simulator() = default;
+	~Simulator();
 
 	/**
 	Starts the simulation run once everything is in place
 	@param[in] num_threads
 	*/
-	void run_sim(int num_threads=1);
+	void run_sim();
 	
-	/**
-	Starts the simulation run once everything is in place
-	@param[in] num_threads
-	*/
-	void add_strategy(::strategy::BaseStrategy* strat);
 
 private:
+	void load_config();
+	/**
+	Starts the simulation run once everything is in place
+	@param[in] strat
+	*/
+	void add_strategy(std::string strat_name, strategy::strat_types type,
+		const boost::property_tree::ptree& config);
+
+	utils::Parser* parser_;
+	boost::property_tree::ptree pt_;
+	std::string closing_prices_csv_path_;
+	std::string holdings_csv_path_;
+	std::string start_time_;
+	std::string end_time_;
+	int num_threads_;
 	uint32_t time_points_;
 	uint32_t num_stocks_;
+	std::vector<std::pair<std::string, strategy::BaseStrategy*>> strats_;
 
 
 }; // class Simulator

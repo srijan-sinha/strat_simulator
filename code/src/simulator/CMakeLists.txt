@@ -10,6 +10,6 @@ include_directories(../../../)
 add_library(simulator_lib simulator.cpp)
 
 add_executable(simulator main.cpp)
-target_link_libraries(simulator simulator_lib parser_lib)
+target_link_libraries(simulator simulator_lib parser_lib sample_strategy_1_lib sample_strategy_2_lib strat_utils_lib)
 
 install(TARGETS simulator DESTINATION simulator)

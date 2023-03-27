@@ -1,12 +1,9 @@
 #pragma once
+#include "code/include/strategy/defs.h"
+#include <boost/property_tree/ptree.hpp>
 #include <cstdint>
 
 namespace strategy {
-enum strat_types : unsigned char {
-	SAMPLE = 0,
-	NUM_STRATEGIES
-}; // enum strat_types
-
 /**
 \class BaseStrategy
 \brief abstract class from which all strategies inherit
@@ -19,8 +16,10 @@ https://docs.google.com/document/d/1qQxmnjdF83CJ6g21Zv_VjCWYLnzhT5ONP10oC3Wrnf0/
 */
 class BaseStrategy {
 public:
-	BaseStrategy();
+	BaseStrategy(const boost::property_tree::ptree& config) : pt_(config) {}
 	~BaseStrategy() = default;
 	virtual void get_position(uint32_t time_index, const double** closing_price, double** positions) = 0;
+private:
+	const boost::property_tree::ptree pt_;
 }; // class BaseStrategy
 } // namespace strategy
