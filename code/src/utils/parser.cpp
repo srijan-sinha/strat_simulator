@@ -13,7 +13,7 @@ Parser::Parser(const char* filename) : ifs_{filename} {
 }
 
 Parser::~Parser() {
-	if(ifs_.is_open()) ifs_.close();
+	close();
 }
 
 bool Parser::read_next_line() {
@@ -50,5 +50,9 @@ void Parser::get_data(std::vector<double>& data_vec) {
 		else
 			data_vec[i-1] = std::numeric_limits<double>::min();
 	}
+}
+
+void Parser::close() {
+	if(ifs_.is_open()) ifs_.close();
 }
 } // namespace utils

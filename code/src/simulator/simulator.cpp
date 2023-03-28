@@ -24,6 +24,7 @@ Simulator::Simulator(const boost::property_tree::ptree& pt)
 Simulator::~Simulator() {
 	for (auto& [_, ofs] : output_fds_)
 		ofs.flush();
+	parser_.close();
 }
 
 void Simulator::run_sim() {
@@ -43,6 +44,7 @@ void Simulator::run_sim() {
 			strat->get_position(ts_num, data_points_, curr_position_[strat_name]);
 		}
 	}
+	parser_.close();
 }
 
 void Simulator::load_strategies() {

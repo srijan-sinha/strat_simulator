@@ -12,6 +12,7 @@ public:
 	bool get_header(std::vector<std::string>& header_vec);
 	std::string get_timestamp();
 	void get_data(std::vector<double>& data_vec);
+	void close();
 
 private:
 	static constexpr int timestamp_len_ = 19;
