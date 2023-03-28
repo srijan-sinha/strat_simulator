@@ -22,8 +22,10 @@ Simulator::Simulator(const boost::property_tree::ptree& pt)
 }
 
 Simulator::~Simulator() {
-	for (auto& [_, ofs] : output_fds_)
+	for (auto& [_, ofs] : output_fds_) {
 		ofs.flush();
+		ofs.close();
+	}
 	parser_.close();
 }
 
