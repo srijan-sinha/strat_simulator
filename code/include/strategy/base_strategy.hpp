@@ -20,7 +20,7 @@ public:
 	BaseStrategy(const boost::property_tree::ptree& config) : pt_(config) {}
 	~BaseStrategy() = default;
 	virtual void get_position(uint32_t time_index,
-			const std::vector<std::vector<double>>& closing_price,
+			const std::vector<double>& closing_price,
 			std::vector<double>& positions) = 0;
 private:
 	const boost::property_tree::ptree pt_;

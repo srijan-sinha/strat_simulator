@@ -27,7 +27,7 @@ public:
 	@param[in] time_points
 	@param[in] num_stocks
 	*/
-	Simulator(const char* config_file);
+	Simulator(const boost::property_tree::ptree& pt);
 
 	/**
 	Destructor
@@ -42,7 +42,7 @@ public:
 	
 
 private:
-	void load_config();
+	void load_strategies();
 	/**
 	Starts the simulation run once everything is in place
 	@param[in] strat
@@ -50,24 +50,25 @@ private:
 	void add_strategy(std::string strat_name, strategy::strat_types type,
 		const boost::property_tree::ptree& config);
 
+	void copy_header_to_output();
+
 	void dump_holdings_to_file(std::string strat_name, int timestamp_index, std::vector<double>& curr_position);
 
-	void write_headers_to_output();
+	const boost::property_tree::ptree pt_;
+	const std::string closing_prices_csv_path_;
+	const std::string holdings_files_path_;
+	const std::string start_time_;
+	const std::string end_time_;
+	const uint32_t num_stocks_;
+	const int num_threads_;
+	utils::Parser parser_;
 
-	utils::Parser* parser_;
-	boost::property_tree::ptree pt_;
-	std::string closing_prices_csv_path_;
-	std::string holdings_files_path_;
-	std::unordered_map<std::string, std::ofstream> output_fds_;
-	std::string start_time_;
-	std::string end_time_;
-	int num_threads_;
-	uint32_t time_points_;
-	uint32_t num_stocks_;
 	std::vector<std::pair<std::string, strategy::BaseStrategy*>> strats_;
-	std::vector<std::vector<double>> data_points_;
+	std::unordered_map<std::string, std::ofstream> output_fds_;
 	std::vector<std::string> headers_;
 	std::vector<std::string> timestamps_;
+	std::vector<double> data_points_;
+	std::unordered_map<std::string, std::vector<double>> curr_position_;
 
 }; // class Simulator
 } // namespace sim

@@ -1,5 +1,6 @@
 #include "code/include/utils/parser.hpp"
 #include <boost/algorithm/string.hpp>
+#include <limits>
 #include <iostream>
 
 namespace utils {
@@ -34,23 +35,20 @@ bool Parser::get_header(std::vector<std::string>& header_vec) {
 	return true;
 }
 
-void Parser::get_timestamp(std::string& timestamp) {
-	timestamp = line_.substr(0,19);
+std::string Parser::get_timestamp() {
+	return line_.substr(0,19);
 }
 
 void Parser::get_data(std::vector<double>& data_vec) {
 	std::vector<std::string> vec;
 	boost::split(vec, line_, boost::is_any_of(","));
-	bool first_item = true;
-	for (auto item: vec) {
-		if (first_item) {
-			first_item = false;
+	for (int i = 0; i < vec.size(); ++i) {
+		if (i == 0)
 			continue;
-		}
-		if (item.length())
-			data_vec.push_back(std::stod(item));
+		if (vec[i].length())
+			data_vec[i-1] = (std::stod(vec[i]));
 		else
-			data_vec.push_back(-1);
+			data_vec[i-1] = std::numeric_limits<double>::min();
 	}
 }
 } // namespace utils

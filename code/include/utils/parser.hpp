@@ -10,7 +10,7 @@ public:
 	~Parser();
 	bool read_next_line();
 	bool get_header(std::vector<std::string>& header_vec);
-	void get_timestamp(std::string& timestamp);
+	std::string get_timestamp();
 	void get_data(std::vector<double>& data_vec);
 
 private:

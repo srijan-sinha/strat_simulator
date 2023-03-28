@@ -1,8 +1,13 @@
 #include "code/include/simulator/simulator.hpp"
-#include <iostream>
+#include "code/include/utils/parser.hpp"
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <cstring>
+
 int main(int argc, char* argv[]) {
-	std::cout << "Yay! Compiling" << std::endl;
-	auto* simulator = new sim::Simulator("./configs/sample.json");
+	boost::property_tree::ptree pt;
+	boost::property_tree::read_json(std::string(argv[1]), pt);
+	auto* simulator = new sim::Simulator(pt);
 	simulator->run_sim();
 	delete simulator;
 }
