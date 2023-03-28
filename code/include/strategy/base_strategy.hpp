@@ -2,6 +2,7 @@
 #include "code/include/strategy/defs.h"
 #include <boost/property_tree/ptree.hpp>
 #include <cstdint>
+#include <vector>
 
 namespace strategy {
 /**
@@ -18,7 +19,9 @@ class BaseStrategy {
 public:
 	BaseStrategy(const boost::property_tree::ptree& config) : pt_(config) {}
 	~BaseStrategy() = default;
-	virtual void get_position(uint32_t time_index, const double** closing_price, double** positions) = 0;
+	virtual void get_position(uint32_t time_index,
+			const std::vector<std::vector<double>>& closing_price,
+			std::vector<double>& positions) = 0;
 private:
 	const boost::property_tree::ptree pt_;
 }; // class BaseStrategy

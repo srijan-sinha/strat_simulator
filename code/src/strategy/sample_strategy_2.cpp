@@ -5,7 +5,7 @@ SampleStrategy2::SampleStrategy2(const boost::property_tree::ptree& config) : Ba
 
 // SampleStrategy2::~SampleStrategy2()
 
-void SampleStrategy2::get_position(uint32_t time_index, const double** closing_price, double** positions) {
-    
-}
+void SampleStrategy2::get_position(uint32_t time_index,
+        const std::vector<std::vector<double>>& closing_price,
+        std::vector<double>& positions) {}
 } // namespace strategy

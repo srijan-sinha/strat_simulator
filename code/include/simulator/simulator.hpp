@@ -3,6 +3,8 @@
 #include "code/include/strategy/defs.h"
 #include "code/include/utils/parser.hpp"
 #include <boost/property_tree/ptree.hpp>
+#include <unordered_map>
+#include <vector>
 #include <cstdint>
 #include <utility>
 
@@ -48,17 +50,24 @@ private:
 	void add_strategy(std::string strat_name, strategy::strat_types type,
 		const boost::property_tree::ptree& config);
 
+	void dump_holdings_to_file(std::string strat_name, int timestamp_index, std::vector<double>& curr_position);
+
+	void write_headers_to_output();
+
 	utils::Parser* parser_;
 	boost::property_tree::ptree pt_;
 	std::string closing_prices_csv_path_;
-	std::string holdings_csv_path_;
+	std::string holdings_files_path_;
+	std::unordered_map<std::string, std::ofstream> output_fds_;
 	std::string start_time_;
 	std::string end_time_;
 	int num_threads_;
 	uint32_t time_points_;
 	uint32_t num_stocks_;
 	std::vector<std::pair<std::string, strategy::BaseStrategy*>> strats_;
-
+	std::vector<std::vector<double>> data_points_;
+	std::vector<std::string> headers_;
+	std::vector<std::string> timestamps_;
 
 }; // class Simulator
 } // namespace sim
