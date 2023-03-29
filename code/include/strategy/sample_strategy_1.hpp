@@ -1,6 +1,9 @@
 #pragma once
 #include "code/include/strategy/base_strategy.hpp"
-
+/**
+\class SampleStrategy1
+\brief implementation of the provided sample strategy
+*/
 namespace strategy {
 class SampleStrategy1 : public BaseStrategy {
 public:

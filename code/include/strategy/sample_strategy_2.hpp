@@ -1,6 +1,10 @@
 #pragma once
 #include "code/include/strategy/base_strategy.hpp"
 
+/**
+\class SampleStrategy2
+\brief an empty strategy just to showcase how multiple strategies can be incorporated
+*/
 namespace strategy {
 class SampleStrategy2 : public BaseStrategy {
 public:
