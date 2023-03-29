@@ -41,6 +41,7 @@ void Simulator::run_sim() {
 	copy_header_to_output();
 
 	if (num_extra_threads_ == 0) {
+		// case when everything is done in one thread
 		while(parser_.read_next_line()) {
 			++ts_num_;
 			timestamps_.push_back(parser_.get_timestamp());
@@ -54,14 +55,18 @@ void Simulator::run_sim() {
 			}
 		}
 	} else {
+		// strategy handling is shifted to the extra threads
+		// main threads only reads the input and feeds data to the threads
+
+		// intialize the threads
 		for (int th = 0; th < num_extra_threads_; ++th) {
 			std::thread thr([=, this]() {
 				while (true) {
 					while(data_avail_for_thread_[th].load(std::memory_order_acquire) != 1
 							&& !data_finished_) {}
-					if (data_finished_) break;
+					if (data_finished_) break; // input over
 					for (int i = 0; i < strats_.size(); ++i) {
-						if (i % num_extra_threads_ == th) {
+						if (i % num_extra_threads_ == th) { // divide the strategy workload across threads
 							auto& strat_name = strats_[i].first;
 							auto* strat = strats_[i].second;
 							dump_holdings_to_file(strat_name, ts_num_);
@@ -74,6 +79,7 @@ void Simulator::run_sim() {
 			std::swap(thr, threads_.at(th));
 		}
 
+		// main thread which is reading the input
 		while(parser_.read_next_line()) {
 			while(!get_if_all_data_avail_false()) {}
 			++ts_num_;
