@@ -3,6 +3,9 @@
 #include "code/include/strategy/defs.h"
 #include "code/include/utils/parser.hpp"
 #include <boost/property_tree/ptree.hpp>
+#include <atomic>
+#include <thread>
+#include <mutex>
 #include <unordered_map>
 #include <vector>
 #include <cstdint>
@@ -54,14 +57,20 @@ private:
 
 	void dump_holdings_to_file(std::string strat_name, int timestamp_index, std::vector<double>& curr_position);
 
+	bool get_if_all_data_avail_false();
+
+	void set_all_data_avail_true();
+
 	const boost::property_tree::ptree pt_;
-	const std::string closing_prices_csv_path_;
-	const std::string holdings_files_path_;
+	const std::string closing_prices_file_;
+	const std::string holdings_output_folder_;
 	const std::string start_time_;
 	const std::string end_time_;
 	const uint32_t num_stocks_;
-	const int num_threads_;
+	const int num_extra_threads_;
 	utils::Parser parser_;
+	std::vector<std::thread> threads_;
+	std::vector<std::atomic<int>> data_avail_for_thread_;
 
 	std::vector<std::pair<std::string, strategy::BaseStrategy*>> strats_;
 	std::unordered_map<std::string, std::ofstream> output_fds_;
@@ -69,6 +78,8 @@ private:
 	std::vector<std::string> timestamps_;
 	std::vector<double> data_points_;
 	std::unordered_map<std::string, std::vector<double>> curr_position_;
+	int ts_num_{0};
+	volatile bool data_finished_{false};
 
 }; // class Simulator
 } // namespace sim

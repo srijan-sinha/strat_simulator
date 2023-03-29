@@ -1,5 +1,5 @@
 mkdir -p ./build
 mkdir -p ./data/output
-rm -rf ./data/output/strat1.csv ./data/output/strat2.csv
+rm -rf ./data/output/strat*
 cmake -Bbuild -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -DCMAKE_BUILD_TYPE=Release
 cmake --build build

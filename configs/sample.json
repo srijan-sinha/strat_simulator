@@ -1,20 +1,50 @@
 {
-    "closing_prices_file" : "./data/input/Close.csv",
-    "holdings_file" : "./data/output/",
-    "num_stocks" : 332,
-    "start_time" : "2021-04-01 00:00:00",
-    "end_time" : "2022-05-01 00:00:00",
-    "num_threads" : 2,
-    "algos" : {
-        "strat1" : {
-            "strat_type" : "SAMPLE1",
-            "param1" : 1,
-            "param2" : "val1"
-        },
-        "strat2" : {
-            "strat_type" : "SAMPLE1",
-            "param1" : 2,
-            "param2" : "val2"
-        }
-    }
+	"closing_prices_file" : "./data/input/Close.csv",
+	"holdings_output_folder" : "./data/output/",
+	"num_stocks" : 332,
+	"start_time" : "2021-04-01 00:00:00",
+	"end_time" : "2022-05-01 00:00:00",
+	"num_extra_threads" : 3,
+	"algos" : {
+		"strat1" : {
+			"strat_type" : "SAMPLE1",
+			"param1" : 1,
+			"param2" : "val1"
+		},
+		"strat2" : {
+			"strat_type" : "SAMPLE1",
+			"param1" : 2,
+			"param2" : "val2"
+		},
+		"strat3" : {
+			"strat_type" : "SAMPLE1",
+			"param1" : 3,
+			"param2" : "val3"
+		},
+		"strat4" : {
+			"strat_type" : "SAMPLE1",
+			"param1" : 4,
+			"param2" : "val4"
+		},
+		"strat5" : {
+			"strat_type" : "SAMPLE1",
+			"param1" : 5,
+			"param2" : "val5"
+		},
+		"strat6" : {
+			"strat_type" : "SAMPLE1",
+			"param1" : 6,
+			"param2" : "val6"
+		},
+		"strat7" : {
+			"strat_type" : "SAMPLE1",
+			"param1" : 7,
+			"param2" : "val7"
+		},
+		"strat8" : {
+			"strat_type" : "SAMPLE1",
+			"param1" : 8,
+			"param2" : "val8"
+		}
+	}
 }
