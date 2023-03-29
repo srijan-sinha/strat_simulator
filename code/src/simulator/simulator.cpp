@@ -2,25 +2,24 @@
 #include "code/include/strategy/sample_strategy_1.hpp"
 #include "code/include/strategy/sample_strategy_2.hpp"
 #include "code/include/strategy/strategy_utils.h"
-#include "code/include/utils/util.h"
 #include <iomanip>
 #include <limits>
 #include <cstring>
 #include <iostream>
 
 namespace sim {
-Simulator::Simulator(const boost::property_tree::ptree& pt)
-		: pt_(pt),
-		closing_prices_file_(pt_.get<std::string>("closing_prices_file")),
-		holdings_output_folder_(pt_.get<std::string>("holdings_output_folder")),
-		start_time_(pt_.get<std::string>("start_time", "2021-04-01 00:00:00")),
-		end_time_(pt_.get<std::string>("end_time", "2022-05-01 00:00:00")),
-		num_stocks_(pt_.get<int>("num_stocks", 0)),
-		num_extra_threads_(pt_.get<int>("num_extra_threads", 1)),
+Simulator::Simulator(const boost::property_tree::ptree& config)
+		: config_(config),
+		closing_prices_file_(config.get<std::string>("closing_prices_file")),
+		holdings_output_folder_(config.get<std::string>("holdings_output_folder")),
+		start_time_(config.get<std::string>("start_time", "2021-04-01 00:00:00")),
+		end_time_(config.get<std::string>("end_time", "2022-05-01 00:00:00")),
+		num_instruments_(config.get<int>("num_instruments", 0)),
+		num_extra_threads_(config.get<int>("num_extra_threads", 1)),
 		parser_(closing_prices_file_.c_str()),
 		threads_(num_extra_threads_),
 		data_avail_for_thread_(num_extra_threads_),
-		data_points_(num_stocks_, std::numeric_limits<double>::min()) {
+		data_points_(num_instruments_, std::numeric_limits<double>::min()) {
 	load_strategies();
 	for (auto& avail: data_avail_for_thread_) {
 		avail.store(0, std::memory_order_release);
@@ -50,7 +49,7 @@ void Simulator::run_sim() {
 
 			parser_.get_data(data_points_);
 			for (auto [strat_name, strat]: strats_) {
-				dump_holdings_to_file(strat_name, ts_num_, curr_position_[strat_name]);
+				dump_holdings_to_file(strat_name, ts_num_);
 				strat->get_position(ts_num_, data_points_, curr_position_[strat_name]);
 			}
 		}
@@ -65,7 +64,7 @@ void Simulator::run_sim() {
 						if (i % num_extra_threads_ == th) {
 							auto& strat_name = strats_[i].first;
 							auto* strat = strats_[i].second;
-							dump_holdings_to_file(strat_name, ts_num_, curr_position_[strat_name]);
+							dump_holdings_to_file(strat_name, ts_num_);
 							strat->get_position(ts_num_, data_points_, curr_position_[strat_name]);
 						}
 					}
@@ -92,7 +91,7 @@ void Simulator::run_sim() {
 }
 
 void Simulator::load_strategies() {
-	for (const auto [strat_name, strat_pt] : pt_.get_child("algos")) {
+	for (const auto [strat_name, strat_pt] : config_.get_child("algos")) {
 		auto strat_type = strategy::utils::get_strat_type_from_string(strat_pt.get<std::string>("strat_type"));
 		std::cout << "Adding strategy: " << strat_name << std::endl;
 		add_strategy(strat_name, strat_type, strat_pt);
@@ -103,7 +102,7 @@ void Simulator::add_strategy(std::string strat_name, strategy::strat_types type,
 		const boost::property_tree::ptree& config) {
 	output_fds_.insert({strat_name, std::ofstream{std::string(holdings_output_folder_ + strat_name + ".csv")}});
 	output_fds_[strat_name] << std::setprecision(16);
-	curr_position_.emplace(strat_name, std::vector<double>(num_stocks_, std::numeric_limits<double>::min()));
+	curr_position_.emplace(strat_name, std::vector<double>(num_instruments_, std::numeric_limits<double>::min()));
 	switch (type) {
 		case strategy::SAMPLE1: {
 			strats_.push_back({strat_name, new strategy::SampleStrategy1(config)});
@@ -127,9 +126,9 @@ void Simulator::copy_header_to_output() {
 	}
 }
 
-void Simulator::dump_holdings_to_file(std::string strat_name, int timestamp_index, std::vector<double>& curr_position) {
+void Simulator::dump_holdings_to_file(std::string strat_name, int timestamp_index) {
 	output_fds_[strat_name] << timestamps_[timestamp_index-1];
-	for (auto val : curr_position) {
+	for (auto val : curr_position_[strat_name]) {
 		if (val == std::numeric_limits<double>::min())
 			output_fds_[strat_name] << ",";
 		else

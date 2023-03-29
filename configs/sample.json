@@ -1,7 +1,7 @@
 {
 	"closing_prices_file" : "./data/input/Close.csv",
 	"holdings_output_folder" : "./data/output/",
-	"num_stocks" : 332,
+	"num_instruments" : 332,
 	"start_time" : "2021-04-01 00:00:00",
 	"end_time" : "2022-05-01 00:00:00",
 	"num_extra_threads" : 3,
