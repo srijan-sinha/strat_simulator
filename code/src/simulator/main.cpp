@@ -1,5 +1,4 @@
 #include "code/include/simulator/simulator.hpp"
-#include "code/include/utils/parser.hpp"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <cstring>
