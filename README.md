@@ -25,3 +25,6 @@ There is a sample json config file in `./configs` for example. Please make sure 
 
 ## Threading
 In the config there is an option for `num_extra_threads`, it allows us to run the simulations over multiple threads. The various strategies are divided over the extra threads and run in parallel.
+
+## Document
+Please find the document explaining the code and classes [here](https://docs.google.com/document/d/1qQxmnjdF83CJ6g21Zv_VjCWYLnzhT5ONP10oC3Wrnf0/edit?usp=sharing "Document").
